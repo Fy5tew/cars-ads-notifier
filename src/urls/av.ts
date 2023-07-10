@@ -24,3 +24,8 @@ export const getNextPageURL = (url: string): string => {
 
 	return getPageUrl(url, curentPage + 1);
 };
+
+
+export const getCarId = (url: string): number | null => {
+	return Number(new URL(url).pathname.split('/').at(-1)) || null;
+};
