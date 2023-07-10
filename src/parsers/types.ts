@@ -2,6 +2,7 @@ import { Browser } from '../browser';
 
 
 export type CarAd = {
+    id: number,
     title: string,
     params: string,
     year: string,

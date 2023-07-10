@@ -10,6 +10,9 @@ import { getPrettyObjectValue } from '../utils/getObjectValue';
 import { CarAd, IParser } from './types';
 
 
+export const BASE_URL = 'https://cars.av.by';
+
+
 export const parseAds = async (url: string, adsNumber = Infinity) => {
 	const browser = new Browser();
 	await browser.open();
