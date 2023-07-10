@@ -1,5 +1,9 @@
 import { JSDOM } from 'jsdom';
 
+import { IBrowser } from '../types/IBrowser';
+import { IParser } from '../types/IParser';
+import { CarAd } from '../types/CarAd';
+
 import { Browser } from '../browser';
 
 import { getCarId } from '../urls/av';
@@ -7,8 +11,6 @@ import { getNextPageURL } from '../urls/av';
 
 import { getPrettyObjectValue } from '../utils/getObjectValue';
 import { getWrappedElementValue } from '../utils/getElementValue';
-
-import { CarAd, IParser } from './types';
 
 
 export const BASE_URL = 'https://cars.av.by';
@@ -24,9 +26,9 @@ export const parseAds = async (url: string, adsNumber = Infinity) => {
 
 
 export class Parser implements IParser {
-	browser: Browser;
+	browser: IBrowser;
 
-	constructor(browser: Browser) {
+	constructor(browser: IBrowser) {
 		this.browser = browser;
 	}
 

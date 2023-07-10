@@ -3,6 +3,8 @@ import puppeteer, {
 	Browser as PuppeteerBrowser,
 } from 'puppeteer';
 
+import { IBrowser } from './types/IBrowser';
+
 
 const PUPPETEER_LAUNCH_OPTIONS: PuppeteerLaunchOptions = {
 	headless: 'new',
@@ -19,7 +21,7 @@ const PUPPETEER_LAUNCH_OPTIONS: PuppeteerLaunchOptions = {
 };
 
 
-export class Browser {
+export class Browser implements IBrowser {
 	private browser: PuppeteerBrowser | null;
 
 	constructor() {
