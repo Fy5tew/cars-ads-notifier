@@ -1,7 +1,7 @@
 import { GetterParams } from './getObjectValue';
 
 
-type CallbackParams = Omit<GetterParams, 'object'> & {
+export type CallbackParams = Omit<GetterParams, 'object'> & {
 	selector: string,
 }
 
