@@ -1,13 +1,17 @@
 export const normalizeURL = (url: string): string => {
-	return url;
+	const urlObject = new URL(url);
+
+	urlObject.searchParams.delete('cursor');
+	urlObject.searchParams.set('sort', 'lst.d');
+
+	return urlObject.href;
 };
 
 
-export const getPageURL = (url: string, page: number): string => {
-	return url;
-};
+export const getPageURL = (url: string, cursor: string): string => {
+	const urlObject = new URL(url);
 
+	urlObject.searchParams.set('cursor', cursor);
 
-export const getNextPageURL = (url: string): string => {
-	return url;
+	return urlObject.href;
 };
