@@ -6,8 +6,8 @@ import { CarAd } from '../types/CarAd';
 
 import { Browser } from '../browser';
 
-import { getCarId } from '../urls/kufar';
-import { getPageURL, getPageCursor } from '../urls/kufar';
+import { getCarId } from '../utils/urls/kufar';
+import { getPageURL, getPageCursor } from '../utils/urls/kufar';
 
 import { getWrappedElementValue } from '../utils/getElementValue';
 import { getObjectValue, getPrettyObjectValue } from '../utils/getObjectValue';

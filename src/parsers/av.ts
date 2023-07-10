@@ -6,8 +6,8 @@ import { CarAd } from '../types/CarAd';
 
 import { Browser } from '../browser';
 
-import { getCarId } from '../urls/av';
-import { getNextPageURL } from '../urls/av';
+import { getCarId } from '../utils/urls/av';
+import { getNextPageURL } from '../utils/urls/av';
 
 import { getPrettyObjectValue } from '../utils/getObjectValue';
 import { getWrappedElementValue } from '../utils/getElementValue';
