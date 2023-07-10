@@ -2,10 +2,11 @@ import { JSDOM } from 'jsdom';
 
 import { Browser } from '../browser';
 
+import { getCarId } from '../urls/av';
 import { getNextPageURL } from '../urls/av';
 
-import { getWrappedElementValue } from '../utils/getElementValue';
 import { getPrettyObjectValue } from '../utils/getObjectValue';
+import { getWrappedElementValue } from '../utils/getElementValue';
 
 import { CarAd, IParser } from './types';
 
@@ -53,6 +54,10 @@ export class Parser implements IParser {
 		const parsedAds = rawAds.map((rawAd: Element): CarAd => {
 			const getValue = getWrappedElementValue(rawAd, getPrettyObjectValue);
 			return {
+				id: getCarId(BASE_URL + getValue({
+					selector: '.listing-item__link',
+					field: 'href',
+				})) || 0,
 				title: getValue({
 					selector: '.listing-item__title', 
 					field: 'textContent',
