@@ -4,6 +4,9 @@ import { Browser } from '../browser';
 
 import { getNextPageURL } from '../urls/av';
 
+import { getWrappedElementValue } from '../utils/getElementValue';
+import { getPrettyObjectValue } from '../utils/getObjectValue';
+
 import { CarAd, IParser } from './types';
 
 
@@ -61,22 +64,46 @@ export class Parser implements IParser {
 
 		const rawAds = Array.from(dom.window.document.querySelectorAll('.listing__items > .listing-item'));
 		const parsedAds = rawAds.map((rawAd: Element): CarAd => {
-			const getValue = (selector: string, field: string, remove = ''): string => {
-				const element = rawAd.querySelector(selector);
-				if (!element) return '';
-				return Object(element)[field]?.toString()?.replace(remove, '')?.trim() || '';
-			};
+			const getValue = getWrappedElementValue(rawAd, getPrettyObjectValue);
 			return {
-				title: getValue('.listing-item__title', 'textContent'),
-				photoURL: getValue('.listing-item__photo > img', 'src'),
-				year: getValue('.listing-item__params > div:nth-child(1)', 'textContent'),
-				params: getValue('.listing-item__params > div:nth-child(2)', 'textContent'),
-				mileage: getValue('.listing-item__params > div:nth-child(3)', 'textContent'),
-				location: getValue('.listing-item__location', 'textContent'),
-				date: getValue('.listing-item__date', 'textContent'),
+				title: getValue({
+					selector: '.listing-item__title', 
+					field: 'textContent',
+				}),
+				params: getValue({
+					selector: '.listing-item__params > div:nth-child(2)', 
+					field: 'textContent',
+				}),
+				year: getValue({
+					selector: '.listing-item__params > div:nth-child(1)', 
+					field: 'textContent',
+				}),
+				mileage: getValue({
+					selector: '.listing-item__params > div:nth-child(3)', 
+					field: 'textContent',
+				}),
+				location: getValue({
+					selector: '.listing-item__location', 
+					field: 'textContent',
+				}),
+				date: getValue({
+					selector: '.listing-item__date', 
+					field: 'textContent',
+				}),
+				photoURL: getValue({
+					selector: '.listing-item__photo > img', 
+					field: 'src',
+				}),
 				price: {
-					BYN: getValue('.listing-item__price', 'textContent'),
-					USD: getValue('.listing-item__priceusd', 'textContent', '≈'),
+					BYN: getValue({
+						selector: '.listing-item__price',
+						field: 'textContent',
+					}),
+					USD: getValue({
+						selector: '.listing-item__priceusd', 
+						field: 'textContent', 
+						removeParts: ['≈'],
+					}),
 				},
 			};
 		});
