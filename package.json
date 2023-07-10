@@ -6,17 +6,12 @@
   "scripts": {
     "lint": "eslint ./src",
     "lint:fix": "npm run lint -- --fix",
-    "build": "rimraf ./build && tsc",
-    "start:dev": "npx ts-node ./src/index.ts",
-    "start:dev:watch": "npx nodemon",
-    "start:prod": "npm run build && node build/index.js"
+    "start": "npx ts-node ./src/index.ts",
+    "start:watch": "npx nodemon"
   },
   "keywords": [],
   "author": "fy5tew",
   "license": "ISC",
-  "imports": {
-    "#*": "./src/*"
-  },
   "devDependencies": {
     "@types/jsdom": "^21.1.1",
     "@types/node": "^20.4.0",
