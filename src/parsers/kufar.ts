@@ -14,53 +14,37 @@ export const BASE_URL = 'https://auto.kufar.by';
 
 
 export const parseAds = async (url: string, adsNumber = Infinity): Promise<CarAd[]> => {
-	return new Parser().parseAds(url, adsNumber);
+	const browser = new Browser();
+	await browser.open();
+	const ads = await new Parser(browser).parseAds(url, adsNumber);
+	await browser.close();
+	return ads;
 };
 
 
 export class Parser implements IParser {
-	private browser: Browser;
+	browser: Browser;
 
-	constructor() {
-		this.browser = new Browser();
+	constructor(browser: Browser) {
+		this.browser = browser;
 	}
 
-	async parseAds(url: string, adsNumber = Infinity, closeBrowser = true): Promise<CarAd[]> {
-		await this.openBrowser();
-		try {
-			const parsedAds: CarAd[] = [];
-			while (parsedAds.length < adsNumber) {
-				const [ pageAds, nextPageCursor ] = await this.parsePage(url);
+	async parseAds(url: string, adsNumber = Infinity): Promise<CarAd[]> {
+		const parsedAds: CarAd[] = [];
+		while (parsedAds.length < adsNumber) {
+			const [ pageAds, nextPageCursor ] = await this.parsePage(url);
 
-				parsedAds.push(...pageAds);
+			parsedAds.push(...pageAds);
 
-				if (!nextPageCursor) break;
+			if (!nextPageCursor) break;
 
-				url = getPageURL(url, nextPageCursor);
-			}
-			return parsedAds.slice(0, adsNumber);
+			url = getPageURL(url, nextPageCursor);
 		}
-		finally {
-			if (closeBrowser) {
-				await this.closeBrowser();
-			}
-		}
-	}
-
-	async openBrowser() {
-		await this.browser.open();
-	}
-
-	async closeBrowser() {
-		await this.browser.close();
-	}
-
-	private async getPageContent(url: string) {
-		return await this.browser.getContent(url);
+		return parsedAds.slice(0, adsNumber);
 	}
 
 	private async parsePage(url: string): Promise<[CarAd[], string | null]> {
-		const pageContent = await this.getPageContent(url);
+		const pageContent = await this.browser.getContent(url);
 		
 		const dom = new JSDOM(pageContent, { runScripts: 'dangerously' });
 

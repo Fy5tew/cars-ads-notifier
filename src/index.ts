@@ -8,8 +8,8 @@ const KUFAR_URL = 'https://auto.kufar.by/l/kupit/cars/volkswagen-passat-b3?cur=U
 (async () => {
 	const kufarAds = await parsers.kufar.parseAds(KUFAR_URL);
 	const avAds = await parsers.av.parseAds(AV_URL);
-	console.log(kufarAds.length);
-	console.log(avAds.length);
 	console.log(kufarAds);
 	console.log(avAds);
+	console.log(kufarAds.length);
+	console.log(avAds.length);
 })();

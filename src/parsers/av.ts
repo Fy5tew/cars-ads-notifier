@@ -11,54 +11,38 @@ import { CarAd, IParser } from './types';
 
 
 export const parseAds = async (url: string, adsNumber = Infinity) => {
-	return new Parser().parseAds(url, adsNumber);
+	const browser = new Browser();
+	await browser.open();
+	const ads = await new Parser(browser).parseAds(url, adsNumber);
+	await browser.close();
+	return ads;
 };
 
 
 export class Parser implements IParser {
-	private browser: Browser;
+	browser: Browser;
 
-	constructor() {
-		this.browser = new Browser;
+	constructor(browser: Browser) {
+		this.browser = browser;
 	}
 
-	async parseAds(url: string, adsNumber = Infinity, closeBrowser = true): Promise<CarAd[]> {
-		await this.openBrowser();
-		try {
-			const parsedAds: CarAd[] = [];
+	async parseAds(url: string, adsNumber = Infinity): Promise<CarAd[]> {
+		const parsedAds: CarAd[] = [];
 
-			while (parsedAds.length < adsNumber) {
-				const pageAds = await this.parsePageAds(url);
+		while (parsedAds.length < adsNumber) {
+			const pageAds = await this.parsePageAds(url);
 
-				if (!pageAds.length) break;
+			if (!pageAds.length) break;
 
-				parsedAds.push(...pageAds);
-				url = getNextPageURL(url);
-			}
-
-			return parsedAds.slice(0, adsNumber);
+			parsedAds.push(...pageAds);
+			url = getNextPageURL(url);
 		}
-		finally {
-			if (closeBrowser) {
-				await this.closeBrowser();
-			}
-		}
-	}
 
-	async openBrowser() {
-		await this.browser.open();
-	}
-
-	async closeBrowser() {
-		await this.browser.close();
-	}
-
-	private async getPageContent(url: string): Promise<string> {
-		return await this.browser.getContent(url);
+		return parsedAds.slice(0, adsNumber);
 	}
 
 	private async parsePageAds(url: string): Promise<CarAd[]> {
-		const pageContent = await this.getPageContent(url);
+		const pageContent = await this.browser.getContent(url);
 		
 		const dom = new JSDOM(pageContent);
 

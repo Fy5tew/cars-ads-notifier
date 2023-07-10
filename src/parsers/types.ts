@@ -1,3 +1,6 @@
+import { Browser } from '../browser';
+
+
 export type CarAd = {
     title: string,
     params: string,
@@ -14,7 +17,6 @@ export type CarAd = {
 
 
 export interface IParser {
-    parseAds(url: string, adsNumber: number, closeBrowser: boolean): Promise<CarAd[]>;
-    openBrowser(): Promise<void>;
-    closeBrowser(): Promise<void>;
+    browser: Browser;
+    parseAds(url: string, adsNumber: number): Promise<CarAd[]>;
 }
