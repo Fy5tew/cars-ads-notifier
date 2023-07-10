@@ -15,3 +15,8 @@ export const getPageURL = (url: string, cursor: string): string => {
 
 	return urlObject.href;
 };
+
+
+export const getPageCursor = (url: string): string | null => {
+	return new URL(url).searchParams.get('cursor');
+};
