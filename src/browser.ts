@@ -6,6 +6,7 @@ import puppeteer, {
 
 const PUPPETEER_LAUNCH_OPTIONS: PuppeteerLaunchOptions = {
 	headless: 'new',
+	defaultViewport: null,
 	args: [
 		'--no-sandbox',
 		'--disable-setuid-sandbox',
@@ -13,6 +14,7 @@ const PUPPETEER_LAUNCH_OPTIONS: PuppeteerLaunchOptions = {
 		'--disable-accelerated-2d-canvas',
 		'--disable-gpu',
 		'--window-size=1920x1080',
+		'--start-maximized',
 	],
 };
 
