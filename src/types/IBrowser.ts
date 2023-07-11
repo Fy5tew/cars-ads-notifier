@@ -1,3 +1,8 @@
+export interface IBrowserConstructor {
+    new (): IBrowser;
+}
+
+
 export interface IBrowser {
     open(): Promise<void>;
     close(): Promise<void>;
