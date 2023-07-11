@@ -59,6 +59,10 @@ export class Parser implements IParser {
 		const rawAds = Array.from(dom.window.document.querySelectorAll('[data-cy="auto-listing-block"] section'));
 		const parsedAds = rawAds.map((rawAd: Element): CarAd => {
 			const getValue = getWrappedElementValue(rawAd, getPrettyObjectValue);
+			const isFree = 'Бесплатно' === getValue({
+				selector: '[class*="styles_price"] > span:nth-child(1)', 
+				field: 'textContent',
+			});
 			return {
 				id: getCarId(getValue({
 					selector: 'a[class*="styles_wrapper"]',
@@ -92,17 +96,22 @@ export class Parser implements IParser {
 					selector: 'img[class*="styles_image"]', 
 					field: 'src',
 				}),
-				price: {
-					BYN: getValue({
-						selector: '[class*="styles_price"] > span:nth-child(1)', 
-						field: 'textContent',
-					}),
-					USD: getValue({
-						selector: '[class*="styles_price"] > span:nth-child(2)', 
-						field: 'textContent', 
-						removeParts: ['*'],
-					}),
-				},
+				price: isFree 
+					? {
+						free: true,
+					}
+					: {
+						free: false,
+						BYN: getValue({
+							selector: '[class*="styles_price"] > span:nth-child(1)', 
+							field: 'textContent',
+						}),
+						USD: getValue({
+							selector: '[class*="styles_price"] > span:nth-child(2)', 
+							field: 'textContent', 
+							removeParts: ['*'],
+						}),
+					},
 			};
 		});
 

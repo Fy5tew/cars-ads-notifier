@@ -8,7 +8,10 @@ export type CarAd = {
     date: string,
     photoURL: string,
     price: {
+        free: false,
         BYN: string,
         USD: string,
+    } | {
+        free: true,
     },
 };

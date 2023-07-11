@@ -55,6 +55,10 @@ export class Parser implements IParser {
 		const rawAds = Array.from(dom.window.document.querySelectorAll('.listing__items > .listing-item'));
 		const parsedAds = rawAds.map((rawAd: Element): CarAd => {
 			const getValue = getWrappedElementValue(rawAd, getPrettyObjectValue);
+			const isFree = 'Бесплатно' === getValue({
+				selector: '.listing-item__price',
+				field: 'textContent',
+			});
 			return {
 				id: getCarId(BASE_URL + getValue({
 					selector: '.listing-item__link',
@@ -88,17 +92,22 @@ export class Parser implements IParser {
 					selector: '.listing-item__photo > img', 
 					field: 'src',
 				}),
-				price: {
-					BYN: getValue({
-						selector: '.listing-item__price',
-						field: 'textContent',
-					}),
-					USD: getValue({
-						selector: '.listing-item__priceusd', 
-						field: 'textContent', 
-						removeParts: ['≈'],
-					}),
-				},
+				price: isFree
+					? {
+						free: true,
+					}
+					: {
+						free: false,
+						BYN: getValue({
+							selector: '.listing-item__price',
+							field: 'textContent',
+						}),
+						USD: getValue({
+							selector: '.listing-item__priceusd', 
+							field: 'textContent', 
+							removeParts: ['≈'],
+						}),
+					},
 			};
 		});
 
