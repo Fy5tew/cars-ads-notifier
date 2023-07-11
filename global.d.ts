@@ -1,4 +1,4 @@
-import { ENV } from './src/config';
+import { ENV } from './src/types/ENV';
 
 
 declare global {

@@ -1,18 +1,10 @@
 import dotenv from 'dotenv';
 
+import { ENV } from './types/ENV';
+import { Config } from './types/Config';
+
 
 dotenv.config();
-
-
-// This values should be in .env file
-export type ENV = {
-	VIBER_API_KEY?: string, 
-};
-
-
-export type Config = {
-	[P in keyof ENV]-?: ENV[P];  // Only required values
-};
 
 
 const getEnv = (): ENV => {
