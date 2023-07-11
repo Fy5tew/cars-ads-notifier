@@ -4,8 +4,6 @@ import { IBrowser } from '../types/IBrowser';
 import { IParser } from '../types/IParser';
 import { CarAd } from '../types/CarAd';
 
-import { Browser } from '../browser';
-
 import { getCarId } from '../utils/urls/kufar';
 import { getPageURL, getPageCursor } from '../utils/urls/kufar';
 
@@ -14,15 +12,6 @@ import { getObjectValue, getPrettyObjectValue } from '../utils/getObjectValue';
 
 
 export const BASE_URL = 'https://auto.kufar.by';
-
-
-export const parseAds = async (url: string, adsNumber = Infinity): Promise<CarAd[]> => {
-	const browser = new Browser();
-	await browser.open();
-	const ads = await new Parser(browser).parseAds(url, adsNumber);
-	await browser.close();
-	return ads;
-};
 
 
 export class Parser implements IParser {

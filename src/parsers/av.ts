@@ -4,8 +4,6 @@ import { IBrowser } from '../types/IBrowser';
 import { IParser } from '../types/IParser';
 import { CarAd } from '../types/CarAd';
 
-import { Browser } from '../browser';
-
 import { getCarId } from '../utils/urls/av';
 import { getNextPageURL } from '../utils/urls/av';
 
@@ -14,15 +12,6 @@ import { getWrappedElementValue } from '../utils/getElementValue';
 
 
 export const BASE_URL = 'https://cars.av.by';
-
-
-export const parseAds = async (url: string, adsNumber = Infinity) => {
-	const browser = new Browser();
-	await browser.open();
-	const ads = await new Parser(browser).parseAds(url, adsNumber);
-	await browser.close();
-	return ads;
-};
 
 
 export class Parser implements IParser {
