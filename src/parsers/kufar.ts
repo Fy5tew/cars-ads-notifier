@@ -8,7 +8,7 @@ import { getCarId } from '../utils/urls/kufar';
 import { getPageURL, getPageCursor } from '../utils/urls/kufar';
 
 import { getWrappedElementValue } from '../utils/getElementValue';
-import { getObjectValue, getPrettyObjectValue } from '../utils/getObjectValue';
+import { getObjectValue, getClearObjectValue, getPrettyObjectValue } from '../utils/getObjectValue';
 
 
 export const BASE_URL = 'https://auto.kufar.by';
@@ -47,41 +47,48 @@ export class Parser implements IParser {
 		
 		const rawAds = Array.from(dom.window.document.querySelectorAll('[data-cy="auto-listing-block"] section'));
 		const parsedAds = rawAds.map((rawAd: Element): CarAd => {
-			const getValue = getWrappedElementValue(rawAd, getPrettyObjectValue);
-			const isFree = 'Бесплатно' === getValue({
+			const getClearValue = getWrappedElementValue(rawAd, getClearObjectValue);
+			const getPrettyValue = getWrappedElementValue(rawAd, getPrettyObjectValue);
+
+			const isFree = 'Бесплатно' === getPrettyValue({
 				selector: '[class*="styles_price"] > span:nth-child(1)', 
 				field: 'textContent',
 			});
+
 			return {
-				id: getCarId(getValue({
+				id: getCarId(getClearValue({
 					selector: 'a[class*="styles_wrapper"]',
 					field: 'href',
 				})) || 0,
-				title: getValue({
+				title: getPrettyValue({
 					selector: '[class*="styles_title"]', 
 					field: 'textContent',
 				}),
-				params: getValue({
+				params: getPrettyValue({
 					selector: '[class*="styles_params"]', 
 					field: 'textContent',
 				}),
-				year: getValue({
+				year: getPrettyValue({
 					selector: '[class*="styles_year"]', 
 					field: 'textContent',
 				}),
-				mileage: getValue({
+				mileage: getPrettyValue({
 					selector: '[class*="styles_mileage"]', 
 					field: 'textContent',
 				}),
-				location: getValue({
+				location: getPrettyValue({
 					selector: '[class*="styles_region"]', 
 					field: 'textContent',
 				}),
-				date: getValue({
+				date: getPrettyValue({
 					selector: '[class*="styles_image__date"]', 
 					field: 'textContent',
 				}),
-				photoURL: getValue({
+				url: getClearValue({
+					selector: 'a[class*="styles_wrapper"]',
+					field: 'href',
+				}),
+				photoURL: getClearValue({
 					selector: 'img[class*="styles_image"]', 
 					field: 'src',
 				}),
@@ -91,11 +98,11 @@ export class Parser implements IParser {
 					}
 					: {
 						free: false,
-						BYN: getValue({
+						BYN: getPrettyValue({
 							selector: '[class*="styles_price"] > span:nth-child(1)', 
 							field: 'textContent',
 						}),
-						USD: getValue({
+						USD: getPrettyValue({
 							selector: '[class*="styles_price"] > span:nth-child(2)', 
 							field: 'textContent', 
 							removeParts: ['*'],

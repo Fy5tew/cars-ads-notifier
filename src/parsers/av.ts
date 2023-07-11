@@ -7,7 +7,7 @@ import { CarAd } from '../types/CarAd';
 import { getCarId } from '../utils/urls/av';
 import { getNextPageURL } from '../utils/urls/av';
 
-import { getPrettyObjectValue } from '../utils/getObjectValue';
+import { getPrettyObjectValue, getClearObjectValue } from '../utils/getObjectValue';
 import { getWrappedElementValue } from '../utils/getElementValue';
 
 
@@ -43,41 +43,48 @@ export class Parser implements IParser {
 
 		const rawAds = Array.from(dom.window.document.querySelectorAll('.listing__items > .listing-item'));
 		const parsedAds = rawAds.map((rawAd: Element): CarAd => {
-			const getValue = getWrappedElementValue(rawAd, getPrettyObjectValue);
-			const isFree = 'Бесплатно' === getValue({
+			const getClearValue = getWrappedElementValue(rawAd, getClearObjectValue);
+			const getPrettyValue = getWrappedElementValue(rawAd, getPrettyObjectValue);
+
+			const isFree = 'Бесплатно' === getPrettyValue({
 				selector: '.listing-item__price',
 				field: 'textContent',
 			});
+			
 			return {
-				id: getCarId(BASE_URL + getValue({
+				id: getCarId(BASE_URL + getClearValue({
 					selector: '.listing-item__link',
 					field: 'href',
 				})) || 0,
-				title: getValue({
+				title: getPrettyValue({
 					selector: '.listing-item__title', 
 					field: 'textContent',
 				}),
-				params: getValue({
+				params: getPrettyValue({
 					selector: '.listing-item__params > div:nth-child(2)', 
 					field: 'textContent',
 				}),
-				year: getValue({
+				year: getPrettyValue({
 					selector: '.listing-item__params > div:nth-child(1)', 
 					field: 'textContent',
 				}),
-				mileage: getValue({
+				mileage: getPrettyValue({
 					selector: '.listing-item__params > div:nth-child(3)', 
 					field: 'textContent',
 				}),
-				location: getValue({
+				location: getPrettyValue({
 					selector: '.listing-item__location', 
 					field: 'textContent',
 				}),
-				date: getValue({
+				date: getPrettyValue({
 					selector: '.listing-item__date', 
 					field: 'textContent',
 				}),
-				photoURL: getValue({
+				url: BASE_URL + getClearValue({
+					selector: '.listing-item__link',
+					field: 'href',
+				}),
+				photoURL: getClearValue({
 					selector: '.listing-item__photo > img', 
 					field: 'src',
 				}),
@@ -87,11 +94,11 @@ export class Parser implements IParser {
 					}
 					: {
 						free: false,
-						BYN: getValue({
+						BYN: getPrettyValue({
 							selector: '.listing-item__price',
 							field: 'textContent',
 						}),
-						USD: getValue({
+						USD: getPrettyValue({
 							selector: '.listing-item__priceusd', 
 							field: 'textContent', 
 							removeParts: ['≈'],

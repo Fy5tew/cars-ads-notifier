@@ -6,6 +6,7 @@ export type CarAd = {
     mileage: string,
     location: string,
     date: string,
+    url: string,
     photoURL: string,
     price: {
         free: false,
