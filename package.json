@@ -2,14 +2,13 @@
   "name": "cars-ads-notifier",
   "version": "1.0.0",
   "description": "",
-  "main": "build/index.js",
-  "type": "module",
+  "main": "src/index.ts",
   "scripts": {
     "lint": "eslint ./src",
     "lint:fix": "npm run lint -- --fix",
     "build": "rimraf build && tsup",
     "start:dev": "npx ts-node ./src/index.ts",
-    "start:prod": "node build/index.cjs",
+    "start:prod": "node build/index.js",
     "deploy": "space push"
   },
   "keywords": [],

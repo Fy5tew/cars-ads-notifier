@@ -7,7 +7,7 @@ micros:
     engine: nodejs16
     primary: true
     public: false
-    run: node build/index.cjs
+    run: node build/index.js
     commands:
       - npm run build
     include: 
