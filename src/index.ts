@@ -1,54 +1,35 @@
-import { Browser } from './browser';
+import express from 'express';
+
 import { Parser as AvParser } from './parsers/av';
-import { Parser as KufarParser } from './parsers/kufar';
+
+import { Browser } from './browser';
+
+import { config } from './config';
 
 
-const ADS_NUMBER = 5;
-const AV_URL = 'https://cars.av.by/filter?brands[0][brand]=1216&brands[0][model]=5912&brands[0][generation]=4746&price_usd[max]=1000&sort=4';
-const KUFAR_URL = 'https://auto.kufar.by/l/kupit/cars/volkswagen-passat-b3?cur=USD&prc=r%3A0%2C1000&size=30&sort=lst.d';
+const AV_URL = 'https://cars.av.by/filter?brands[0][brand]=1216&brands[0][model]=5912&brands[0][generation]=4746&price_usd[max]=1000';
 
 
-const parse = async () => {
+const app = express();
+
+
+app.get('/', (request, response) => {
+	response.send('<h1>Hello there!</h1><p>Fy5tew\'s server is running</p>');
+});
+
+
+app.get('/av', async (request, response) => {
 	const browser = new Browser();
 	const avParser = new AvParser(browser);
-	const kufarParser = new KufarParser(browser);
 
 	await browser.open();
-	console.time('parsing');
-	const [avAdsResult, kufarAdsResult] = await Promise.allSettled([
-		avParser.parseAds(AV_URL, ADS_NUMBER),
-		kufarParser.parseAds(KUFAR_URL, ADS_NUMBER),
-	]);
-	console.timeEnd('parsing');
+	const avAds = await avParser.parseAds(AV_URL);
 	await browser.close();
 
-	console.log('AV: ');
-	if (avAdsResult.status === 'fulfilled') {
-		console.log(avAdsResult.value.length, avAdsResult.value);
-	}
-	else {
-		console.log(avAdsResult.reason);
-	}
-
-	console.log('KUFAR: ');
-	if (kufarAdsResult.status === 'fulfilled') {
-		console.log(kufarAdsResult.value.length, kufarAdsResult.value);
-	}
-	else {
-		console.log(kufarAdsResult.reason);
-	}
+	response.send(JSON.stringify(avAds, undefined, 4));
+});
 
 
-};
-
-
-const main = async () => {
-	console.log('start');
-	console.time('parse');
-	await parse();
-	console.timeEnd('parse');
-	console.log('finish');
-};
-
-
-main();
+app.listen(config.PORT, () => {
+	console.log(`App started at http://localhost:${config.PORT}/`);
+});
