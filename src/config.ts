@@ -9,6 +9,7 @@ dotenv.config();
 
 const getEnv = (): ENV => {
 	return {
+		PORT: Number(process.env.PORT) || 3000,
 		VIBER__MAIN_API_KEY: process.env.VIBER__MAIN_API_KEY,
 		VIBER__DEV_API_KEY: process.env.VIBER__DEV_API_KEY,
 		VIBER__ADMIN_ID: process.env.VIBER__ADMIN_ID,
