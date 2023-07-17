@@ -3,16 +3,17 @@ v: 0
 icon: assets/logo.dev.512.png
 micros:
   - name: cars-ads-notifier
+    primary: true
     src: ./
     engine: nodejs16
-    primary: true
-    public: false
     run: node build/index.js
     commands:
       - npm run build
     include: 
       - node_modules/
       - build/
+    public_routes:
+      - /__viber/*
     presets:
       env:
         - name: VIBER__MAIN_API_KEY
