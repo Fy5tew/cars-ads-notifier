@@ -1,0 +1,23 @@
+# Spacefile Docs: https://go.deta.dev/docs/spacefile/v0
+v: 0
+icon: assets/logo.dev.512.png
+micros:
+  - name: cars-ads-notifier
+    src: ./
+    engine: nodejs16
+    primary: true
+    public: false
+    run: node build/index.cjs
+    commands:
+      - npm run build
+    include: 
+      - node_modules/
+      - build/
+    presets:
+      env:
+        - name: VIBER__MAIN_API_KEY
+          description: API key of the main Viber bot
+        - name: VIBER__DEV_API_KEY
+          description: API key of the dev Viber bot
+        - name: VIBER__ADMIN_ID
+          description: Viber ID of the admin user (related to the bot with key VIBER__DEV_API_KEY)
